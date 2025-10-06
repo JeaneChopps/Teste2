@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+</head>
+<body>
+<h2>Página de Login</h2>
+<form id="loginForm">
+<label>Usuário:</label>
+<input type="text" id="usuario" required><br><br>
+<label>Senha:</label>
+<input type="password" id="senha" required><br><br>
+<button type="submit">Entrar</button>
+</form>
+<h3 id="mensagem"></h3>
+
+<h2>Cadastro de Novo Usuário</h2>
+<form id="cadastroForm">
+<label>Novo Usuário:</label>
+<input type="text" id="novoUsuario" required><br><br>
+<label>Nova Senha:</label>
+<input type="password" id="novaSenha" required><br><br>
+<button type="submit">Cadastrar</button>
+</form>
+<h3 id="mensagemCadastro"></h3>
+<script>
+
+const usuarios = [
+{ nome: "nicolas", senha: "1234", status: "liberado" },
+{ nome: "maria", senha: "abcd", status: "bloqueado" },
+{ nome: "ana", senha: "senha1", status: "entrar" },
+{ nome: "pedro", senha: "senha2", status: "liberado" },
+{ nome: "lucas", senha: "teste", status: "liberado" }
+];
+document.getElementById("loginForm").addEventListener("submit",
+function(event) {
+event.preventDefault(); 
+const usuario = document.getElementById("usuario").value;
+const senha = document.getElementById("senha").value;
+
+const user = usuarios.find(u => u.nome === usuario &&
+u.senha === senha);
+const mensagem = document.getElementById("mensagem");
+if (user) {
+
+
+switch(user.status) {
+case "bloqueado":
+mensagem.textContent = "Usuário bloqueado!";
+break;
+case "liberado":
+mensagem.textContent = "Acesso liberado! Bem-vindo!";
+break;
+case "entrar":
+mensagem.textContent = "Entre em contato com o suporte!";
+break;
+default:
+mensagem.textContent = "Status desconhecido.";
+}
+} else {
+mensagem.textContent = "Usuário ou senha inválidos!";
+}
+});
+
+
+document.getElementById("cadastroForm").addEventListener("submit", function(event) {
+event.preventDefault();
+const novoUsuario = document.getElementById("novoUsuario").value.trim();
+const novaSenha = document.getElementById("novaSenha").value;
+const mensagemCadastro = document.getElementById("mensagemCadastro");
+
+
+const existe = usuarios.some(u => u.nome === novoUsuario);
+
+if (existe) {
+mensagemCadastro.textContent = "Usuário já existe! Escolha outro nome.";
+} else {
+usuarios.push({ nome: novoUsuario, senha: novaSenha, status: "liberado" });
+mensagemCadastro.textContent = "Usuário cadastrado com sucesso!";
+document.getElementById("cadastroForm").reset();
+}
+});
+</script>
+</body>
+</html>
